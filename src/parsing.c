@@ -99,9 +99,11 @@ int	parse_ping_args(int argc, char **argv, t_ping_ctx *ping_ctx) {
 		else {
 			get_hostname(*tmp, ping_ctx);
 			printf("des IP: %d", ping_ctx->dest_ip);
-			return 1;
+			if (ping_ctx->opt == HELP)
+				return (1);
 		}
 		tmp++;
 	}
 	tmp = NULL;
+	return (1);
 }

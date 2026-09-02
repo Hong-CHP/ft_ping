@@ -12,6 +12,7 @@
 # include <netinet/in.h> 
 # include <netdb.h>
 # include <string.h>
+# include <signal.h>
 
 typedef enum e_icmp_proto_type
 {
@@ -60,7 +61,11 @@ typedef struct s_ping_ctx
 	double	rtt_sum_sq;
 }				t_ping_ctx;
 
+extern 	t_ping_ctx	*g_ctx;
 
-int    parse_ping_args(int argc, char **argv, t_ping_ctx *ping_ctx);
+int		parse_ping_args(int argc, char **argv, t_ping_ctx *ping_ctx);
+int		init_socket(t_ping_ctx *ping_ctx);
+int		init_ttl(t_ping_ctx *ping_ctx);
+int		init_signal(t_ping_ctx *ping_ctx);
 
 #endif
