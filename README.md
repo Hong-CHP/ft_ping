@@ -31,10 +31,10 @@ This is a project about reproduct ping implementation from inetutils-2.0 in prog
 #### b. ICMP message format:
 * 1 bytes(0-8): type
 * 1 bytes(8-16): code
-* 2 bytes(48-64): checksum
-* 2 bytes(16-32): id
-* 2 bytes(32-48): sequence
-* 54 bytes(default): payload
+* 2 bytes(16-32): checksum
+* 2 bytes(32-48): id
+* 2 bytes(48-64): sequence
+* 56 bytes(default): payload
 
 ### Raw Socket
 ### Checksum
@@ -51,7 +51,7 @@ An initial value from destination return in Echo Replay, -1 by passing a routage
 * ttl
 ### 3. build echo request
 * build ICMP header (8 bytes)
-* build ICMP payload (54 bytes)
+* build ICMP payload (56 bytes)
 * checksum
 ### 4. send
 * sendto

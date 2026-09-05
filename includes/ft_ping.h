@@ -13,6 +13,7 @@
 # include <netdb.h>
 # include <string.h>
 # include <signal.h>
+# include <sys/time.h>
 
 typedef enum e_icmp_proto_type
 {
@@ -67,5 +68,6 @@ int		parse_ping_args(int argc, char **argv, t_ping_ctx *ping_ctx);
 int		init_socket(t_ping_ctx *ping_ctx);
 int		init_ttl(t_ping_ctx *ping_ctx);
 int		init_signal(t_ping_ctx *ping_ctx);
+void	build_icmp_echo_request(t_ping_ctx *ping_ctxm, char packet[64], int seq);
 
 #endif
