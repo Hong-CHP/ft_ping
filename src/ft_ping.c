@@ -3,16 +3,22 @@
 void    ping_loop(t_ping_ctx *ping_ctx) {
     int seq = 1;
     char packet[64];
+    char    recv_buf[RECV_BUF_SIZE];
+    t_icmphdr	*icmphdr;
 
     while (1) {
-        build_icmp_echo_request(ping_ctx, packet, seq);
-        send_request(ping, packet);
-        // ping_ctx->sent_count++;
-        // if (receive_icmp_echo_reply()) {
+        build_icmp_echo_request(ping_ctx, icmphdr, packet, seq);
+        if (send_request(ping_ctx, packet)) {
+            seq++;
+            sleep(1);
+            continue;
+        }
+        ping_ctx->sent_count++;
+        if (receive_icmp_echo_reply(ping_ctx, icmphdr, recv_buf, packet)) {
         //     print_reply();
-        //     ping_ctx->recv_count++;
+            ping_ctx->recv_count++;
 
-        // }
+        }
         printf("seq = %d\n", seq);
         seq++;
         sleep(1);

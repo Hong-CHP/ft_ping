@@ -14,8 +14,7 @@ uint16_t checksum(void *packet, int len) {
 	return (~sum);
 }
 
-void	build_icmp_echo_request(t_ping_ctx *ping_ctxm, char packet[64], int seq) {
-	t_icmphdr	*icmphdr;
+void	build_icmp_echo_request(t_ping_ctx *ping_ctxm, t_icmphdr *icmphdr, char packet[64], int seq) {
 	icmphdr = (t_icmphdr*)packet;
 	icmphdr->type = ECHO_REQUEST;
 	icmphdr->code = 0;

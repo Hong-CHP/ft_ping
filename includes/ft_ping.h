@@ -14,6 +14,9 @@
 # include <string.h>
 # include <signal.h>
 # include <sys/time.h>
+# include <netinet/ip.h>
+
+# define	RECV_BUF_SIZE 1024;
 
 typedef enum e_icmp_proto_type
 {
@@ -52,6 +55,7 @@ typedef struct s_ping_ctx
 	uint32_t source_ip;
 	uint32_t dest_ip;
 	uint8_t ttl;
+	uint8_t	reply_ttl;
 	int		verbose;
 	int		sockfd;
 	int		sent_count;
@@ -69,6 +73,6 @@ int		init_socket(t_ping_ctx *ping_ctx);
 int		init_ttl(t_ping_ctx *ping_ctx);
 int		init_signal(t_ping_ctx *ping_ctx);
 void	build_icmp_echo_request(t_ping_ctx *ping_ctxm, char packet[64], int seq);
-void	send_request(t_ping_ctx *ping_ctx, char *packet);
+int		send_request(t_ping_ctx *ping_ctx, char *packet);
 
 #endif
