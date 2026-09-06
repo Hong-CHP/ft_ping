@@ -69,5 +69,6 @@ int		init_socket(t_ping_ctx *ping_ctx);
 int		init_ttl(t_ping_ctx *ping_ctx);
 int		init_signal(t_ping_ctx *ping_ctx);
 void	build_icmp_echo_request(t_ping_ctx *ping_ctxm, char packet[64], int seq);
+void	send_request(t_ping_ctx *ping_ctx, char *packet);
 
 #endif
