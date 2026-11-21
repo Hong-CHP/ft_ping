@@ -1,21 +1,19 @@
 #include "ft_ping.h"
 #include <ctype.h>
 
-int not_empty(char *str) {
-	if (!str)
-		return 0;
+int contain_space_char(char *str) {
 	while (*str) {
 		if (isspace(*str))
-			return 0;
+			return 1;
 		str++;
 	}
-	return 1;
+	return 0;
 }
 
 char	get_option(char *option, t_ping_ctx *ping_ctx) {
 		if (!option[1]) {
 			ping_ctx->opt = INVALID;
-			fprintf(stderr, "ft_ping: -: Temporary failure in name resolution\n");
+			fprintf(stderr, "ft_ping: unknown host\n");
 			return '\0';
 		}
 		if (option[1] == '?') {
@@ -24,32 +22,28 @@ char	get_option(char *option, t_ping_ctx *ping_ctx) {
 			ping_ctx->opt = HELP;
 			return '?';
 		} else if (option[1] == 'v') {
+			ping_ctx->opt = VERBOSE;
 			int i = 2;
-			while (option[i]) {
-				if (option[i] == 'v')
-					ping_ctx->opt = VERBOSE;
-				else if (option[i] == '?') {
+			while (option[i]) {			
+				if (option[i] == '?') {
 					// print_usage();
 					printf("print usage\n");
 					ping_ctx->opt = HELP;
 					return '?';
-				} else {
+				} else if (option[i] != 'v') {
 					ping_ctx->opt = INVALID;
 					fprintf(stderr, "ft_ping: invalid option --'%c'\n", option[i]);
-					// print_usage();
-					printf("print usage\n");
-					return '\0';
+					fprintf(stderr, "Try 'ping --help' or 'ping --usage' for more information.\n");
+					return option[i];
 				}
 				i++;
 			}
-			ping_ctx->opt = VERBOSE;
 			return 'v';
 		} else {
 			ping_ctx->opt = INVALID;
 			fprintf(stderr, "ft_ping: invalid option --'%c'\n", option[i]);
-			// print_usage();
-			printf("print usage\n");
-			return '\0';
+			fprintf(stderr, "Try 'ping --help' or 'ping --usage' for more information.\n");
+			return option[i];
 		}
 }
 
@@ -76,34 +70,33 @@ int	get_hostname(char *arg, t_ping_ctx *ping_ctx) {
 
 int	parse_ping_args(int argc, char **argv, t_ping_ctx *ping_ctx) {
 	char **tmp = argv;
-	while (not_empty(*tmp)) {
-		tmp++;
-	}
-	if (!*tmp) {
-		fprintf(stderr, "ft_ping: : No address associated with hostname\n");
-		return (0);
-	}
+
 	ping_ctx->opt = NO_OPT;
-	tmp = argv;
 	while (*tmp) {
-		if (not_empty(*tmp))
-			continue;
+		if (!*tmp || *tmp == '\0') {
+			fprintf(stderr, "ft_ping: unknown host\n");
+			return(0);
+		}
 		if ((*tmp)[0] == '-') {
 			char c = get_option(*tmp, ping_ctx);
-			if (ping_ctx->opt == INVALID)
-				return (0);
-			if (ping_ctx->opt == '?')
-				return (1);
 			if (argc == 1 && c == 'v' && ping_ctx->opt == VERBOSE) {
-			    fprintf(stderr, "ft_ping: usage error: Destination address required\n");
-				return (0);
+				fprintf(stderr, "ft_ping: missing host operand\n");
+				fprintf(stderr, "Try 'ping --help' or 'ping --usage' for more information.\n");
+ 				return (127);
 			}
-		}
-		else {
+			if (ping_ctx->opt == INVALID)
+				return (64);
+			if (ping_ctx->opt == '?')
+				return (0);
+		} else {
+			if (contain_space_char(*tmp)) {
+				fprintf(stderr, "ft_ping: unknown host\n");
+				return(0);	
+			}
 			get_hostname(*tmp, ping_ctx);
 			printf("dest IP: %d", ping_ctx->dest_ip);
 			if (ping_ctx->opt == HELP)
-				return (1);
+				return (0);
 		}
 		tmp++;
 	}

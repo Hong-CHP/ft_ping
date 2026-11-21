@@ -9,14 +9,15 @@ void    ping_loop(t_ping_ctx *ping_ctx) {
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        fprintf(stderr, "ft_ping: usage error: Destination address required\n");
-        exit(2);
+		fprintf(stderr, "ft_ping: missing host operand\n");
+		fprintf(stderr, "Try 'ping --help' or 'ping --usage' for more information.\n");
+        return(127);
     }
     t_ping_ctx  *ping_ctx;
     ping_ctx = malloc(sizeof(t_ping_ctx));
     if (!ping_ctx) {
         fprintf(stderr, "malloc failed\n");
-        exit(1);
+        return(1);
     }
     memset(ping_ctx, 0, sizeof(t_ping_ctx));
     ping_ctx->ttl = 64;
